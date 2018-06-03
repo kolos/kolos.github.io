@@ -18,7 +18,6 @@
     </style>
     <script>
       var REFRESH_MINUTES = 5;
-      var chartData = {};
       var tempChart = null;
       var chartColors = {
         red: 'rgb(255, 99, 132)',
@@ -101,14 +100,16 @@
       
       var refreshData = function() {
         
-        fetch('http://kolos.play.ai/data.php')
+        fetch('https://kolos.play.ai/data.php')
           .then(function(d) {
             return d.json();
           })
           .then(function(d) {
-            chartData = makeChartData(d);
             
             if(! tempChart) appendChart();
+            
+            tempChart.options.title.text = "DS1820 temps - updated: "  + d.updated + "";
+            tempChart.data = makeChartData(d);
             tempChart.update();
           });
       };
@@ -122,12 +123,12 @@
         var ctx = document.getElementById('temps').getContext('2d');
         tempChart = new Chart(ctx, {
           type: 'bar',
-          data: chartData,
+          data: null,
           options: {
             responsive: true,
             title: {
               display: true,
-              text: 'DS1820 temps'
+              text: '', 
             },
             tooltips: {
               mode: 'index',
@@ -167,6 +168,15 @@
                 scaleLabel: {
                   display: true,
                   labelString: 'Sample size'
+                }
+              }],
+              xAxes: [{
+                type: 'time',
+                time: {
+                  unit: 'hour',
+                  displayFormats: {
+                    'hour': 'ddd HH:00'
+                  }
                 }
               }],
             }
