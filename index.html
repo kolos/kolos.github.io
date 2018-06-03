@@ -3,24 +3,181 @@
   <head>
     <meta charset="utf-8">
     <title>kolos @ github</title>
-	<style>
-		body { background-color: #404040 }		
-		div {
-			position: absolute;
-			top: 38.2%;
-			left: 50%;
-			margin-top: -40px;
-			margin-left: -80px;
-			color: white; 
-			font-family: "Segoe UI", "Open Sans", "Droid Sans";
-			font-size: 40px;
-			text-shadow: 2px 2px #000;
-		}
-	</style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js" integrity="sha256-XF29CBwU1MWLaGEnsELogU6Y6rcc5nCkhhx89nFMIDQ=" crossorigin="anonymous"></script>
+    <style>
+      body { background-color: #404040 }
+
+      div#chart{
+        position: absolute;
+        top: 15%;
+        margin-left: 15%;
+        width: 70%;
+        background: lightyellow;
+        border: 1px solid yellow;
+      }
+    </style>
+    <script>
+      var REFRESH_MINUTES = 5;
+      var chartData = {};
+      var tempChart = null;
+      var chartColors = {
+        red: 'rgb(255, 99, 132)',
+        orange: 'rgb(255, 159, 64)',
+        yellow: 'rgb(255, 205, 86)',
+        green: 'rgb(75, 192, 192)',
+        blue: 'rgb(54, 162, 235)',
+        purple: 'rgb(153, 102, 255)',
+        grey: 'rgb(201, 203, 207)'
+      };
+      
+      window.onload = function() {
+        startUpdater(REFRESH_MINUTES);
+      };
+      
+      var makeChartData = function(data) {
+        var tmpChartData = {
+          labels: [],
+          datasets: [],
+        };
+      
+        var temp0Dataset = {
+          type: 'line',
+          label: 'Temp0',
+          borderColor: window.chartColors.blue,
+          borderWidth: 2,
+          fill: false,
+          yAxisID: 'temperature',
+          data: []
+        };
+
+        var temp1Dataset = {
+          type: 'line',
+          label: 'Temp1',
+          borderColor: window.chartColors.red,
+          borderWidth: 2,
+          fill: false,
+          yAxisID: 'temperature',
+          data: []
+        };
+
+        var temp0_sampleDataset = {
+          type: 'bar',
+          label: 'T0 sample',
+          backgroundColor: "#C8C8C8",
+          fill: false,
+          yAxisID: 'samplesize',
+          data: [],
+          hidden: true
+        };
+        
+        var temp1_sampleDataset = {
+          type: 'bar',
+          label: 'T1 sample',
+          backgroundColor: "#B8B8B8",
+          fill: false,
+          yAxisID: 'samplesize',
+          data: [],
+          hidden: true
+        };
+        
+      
+        data.temps.forEach(function(d) {
+          tmpChartData.labels.push(d.hour);
+          
+          
+          temp0Dataset.data.push(d.temp0);
+          temp1Dataset.data.push(d.temp1);
+          temp0_sampleDataset.data.push(d.temp0_sample);
+          temp1_sampleDataset.data.push(d.temp1_sample);
+        });
+
+        tmpChartData.datasets.push(temp0Dataset);
+        tmpChartData.datasets.push(temp1Dataset);
+        tmpChartData.datasets.push(temp0_sampleDataset);
+        tmpChartData.datasets.push(temp1_sampleDataset);
+        
+        return tmpChartData;
+      };
+      
+      var refreshData = function() {
+        
+        fetch('http://kolos.play.ai/data.php')
+          .then(function(d) {
+            return d.json();
+          })
+          .then(function(d) {
+            chartData = makeChartData(d);
+            
+            if(! tempChart) appendChart();
+            tempChart.update();
+          });
+      };
+      
+      var startUpdater = function(refresh_minutes) {
+        refreshData();
+        setInterval(refreshData, refresh_minutes * 60 * 1000);
+      };
+      
+      var appendChart = function() {
+        var ctx = document.getElementById('temps').getContext('2d');
+        tempChart = new Chart(ctx, {
+          type: 'bar',
+          data: chartData,
+          options: {
+            responsive: true,
+            title: {
+              display: true,
+              text: 'DS1820 temps'
+            },
+            tooltips: {
+              mode: 'index',
+              intersect: true,
+              callbacks: {
+                label: function(item, data) {
+
+                  var itemvalue = item.yLabel;
+                  if(data.datasets[item.datasetIndex].yAxisID == "temperature") {
+                    itemvalue = item.yLabel.toFixed(2) + "°C";
+                  } else if(data.datasets[item.datasetIndex].yAxisID == "samplesize") {
+                    itemvalue = item.yLabel + " db";
+                  }
+                  
+                  return data.datasets[item.datasetIndex].label + ": " + itemvalue;
+                }
+              }
+            },
+            scales: {
+              yAxes: [{
+                type: 'linear',
+                display: true,
+                position: 'left',
+                id: 'temperature',
+                scaleLabel: {
+                  display: true,
+                  labelString: 'Hőmérséklet °C'
+                }
+              }, {
+                type: 'linear',
+                display: true,
+                position: 'right',
+                id: 'samplesize',
+                gridLines: {
+                  drawOnChartArea: false
+                },
+                scaleLabel: {
+                  display: true,
+                  labelString: 'Sample size'
+                }
+              }],
+            }
+          }
+        });
+      };
+    </script>
   </head>
   <body>
-    <div>
-		 ✨ kolos
-	</div>
+    <div id="chart">
+      <canvas id="temps" width="100%";></canvas>
+    </div>
   </body>
 </html>
