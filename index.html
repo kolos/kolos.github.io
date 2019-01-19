@@ -59,26 +59,24 @@
           data: []
         };
 
-        var temp0_sampleDataset = {
-          type: 'bar',
-          label: 'T0 sample',
+        var temp2Dataset = {
+          type: 'line',
+          label: 'Temp2',
+          borderColor: window.chartColors.purple,
+          borderWidth: 2,
+          fill: false,
+          yAxisID: 'temperature',
+          data: []
+        };
+
+        var lightDataset = {
+          type: 'line',
+          label: 'Light',
           backgroundColor: "#C8C8C8",
           fill: false,
-          yAxisID: 'samplesize',
+          yAxisID: 'light',
           data: [],
-          hidden: true
         };
-        
-        var temp1_sampleDataset = {
-          type: 'bar',
-          label: 'T1 sample',
-          backgroundColor: "#B8B8B8",
-          fill: false,
-          yAxisID: 'samplesize',
-          data: [],
-          hidden: true
-        };
-        
       
         data.temps.forEach(function(d) {
           tmpChartData.labels.push(d.hour);
@@ -86,14 +84,14 @@
           
           temp0Dataset.data.push(d.temp0);
           temp1Dataset.data.push(d.temp1);
-          temp0_sampleDataset.data.push(d.temp0_sample);
-          temp1_sampleDataset.data.push(d.temp1_sample);
+          temp2Dataset.data.push(d.temp2);
+          lightDataset.data.push(Math.round(d.light / 1024 * 100, 0));
         });
 
         tmpChartData.datasets.push(temp0Dataset);
         tmpChartData.datasets.push(temp1Dataset);
-        tmpChartData.datasets.push(temp0_sampleDataset);
-        tmpChartData.datasets.push(temp1_sampleDataset);
+        tmpChartData.datasets.push(temp2Dataset);
+        tmpChartData.datasets.push(lightDataset);
         
         return tmpChartData;
       };
@@ -139,8 +137,8 @@
                   var itemvalue = item.yLabel;
                   if(data.datasets[item.datasetIndex].yAxisID == "temperature") {
                     itemvalue = item.yLabel.toFixed(2) + "°C";
-                  } else if(data.datasets[item.datasetIndex].yAxisID == "samplesize") {
-                    itemvalue = item.yLabel + " db";
+                  } else if(data.datasets[item.datasetIndex].yAxisID == "light") {
+                    itemvalue = item.yLabel + " %";
                   }
                   
                   return data.datasets[item.datasetIndex].label + ": " + itemvalue;
@@ -161,13 +159,13 @@
                 type: 'linear',
                 display: true,
                 position: 'right',
-                id: 'samplesize',
+                id: 'light',
                 gridLines: {
                   drawOnChartArea: false
                 },
                 scaleLabel: {
                   display: true,
-                  labelString: 'Sample size'
+                  labelString: 'Light %'
                 }
               }],
               xAxes: [{
