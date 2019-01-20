@@ -69,6 +69,16 @@
           data: []
         };
 
+        var temp3Dataset = {
+          type: 'line',
+          label: 'Temp3',
+          borderColor: window.chartColors.orange,
+          borderWidth: 2,
+          fill: false,
+          yAxisID: 'temperature',
+          data: []
+        };
+
         var lightDataset = {
           type: 'line',
           label: 'Light',
@@ -85,12 +95,14 @@
           temp0Dataset.data.push(d.temp0);
           temp1Dataset.data.push(d.temp1);
           temp2Dataset.data.push(d.temp2);
+          temp3Dataset.data.push(d.temp3);
           lightDataset.data.push(Math.round(d.light / 1024 * 100, 0));
         });
 
         tmpChartData.datasets.push(temp0Dataset);
         tmpChartData.datasets.push(temp1Dataset);
         tmpChartData.datasets.push(temp2Dataset);
+        tmpChartData.datasets.push(temp3Dataset);
         tmpChartData.datasets.push(lightDataset);
         
         return tmpChartData;
