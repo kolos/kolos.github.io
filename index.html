@@ -87,6 +87,16 @@
           yAxisID: 'light',
           data: [],
         };
+
+        var light2Dataset = {
+          type: 'line',
+          label: 'Light2',
+          backgroundColor: "#C8C8C8",
+          borderColor: "#B8B8B8",
+          fill: false,
+          yAxisID: 'light',
+          data: [],
+        };
       
         data.temps.forEach(function(d) {
           tmpChartData.labels.push(d.hour);
@@ -97,6 +107,7 @@
           temp2Dataset.data.push(d.temp2);
           temp3Dataset.data.push(d.temp3);
           lightDataset.data.push(Math.round(d.light / 1024 * 100, 0));
+          light2Dataset.data.push(Math.round(d.light2 / 1024 * 100, 0));
         });
 
         tmpChartData.datasets.push(temp0Dataset);
@@ -104,6 +115,7 @@
         tmpChartData.datasets.push(temp2Dataset);
         tmpChartData.datasets.push(temp3Dataset);
         tmpChartData.datasets.push(lightDataset);
+        tmpChartData.datasets.push(light2Dataset);
         
         return tmpChartData;
       };
@@ -161,7 +173,7 @@
               yAxes: [{
                 type: 'linear',
                 display: true,
-                position: 'left',
+                position: 'right',
                 id: 'temperature',
                 scaleLabel: {
                   display: true,
@@ -170,7 +182,7 @@
               }, {
                 type: 'linear',
                 display: true,
-                position: 'right',
+                position: 'left',
                 id: 'light',
                 gridLines: {
                   drawOnChartArea: false
