@@ -19,15 +19,17 @@
     <script>
       var REFRESH_MINUTES = 5;
       var tempChart = null;
-      var chartColors = {
-        red: 'rgb(255, 99, 132)',
-        orange: 'rgb(255, 159, 64)',
-        yellow: 'rgb(255, 205, 86)',
-        green: 'rgb(75, 192, 192)',
-        blue: 'rgb(54, 162, 235)',
-        purple: 'rgb(153, 102, 255)',
-        grey: 'rgb(201, 203, 207)'
-      };
+      var chartColors = [
+            "#e41a1c",
+            "#377eb8",
+            "#4daf4a",
+            "#984ea3",
+            "#ff7f00",
+            "#ffff33",
+            "#a65628",
+            "#f781bf",
+            "#999999",
+      ];
       
       window.onload = function() {
         startUpdater(REFRESH_MINUTES);
@@ -42,7 +44,7 @@
         var temp0Dataset = {
           type: 'line',
           label: 'Temp0',
-          borderColor: window.chartColors.blue,
+          borderColor: window.chartColors[1],
           borderWidth: 2,
           fill: false,
           yAxisID: 'temperature',
@@ -52,7 +54,7 @@
         var temp1Dataset = {
           type: 'line',
           label: 'Temp1',
-          borderColor: window.chartColors.red,
+          borderColor: window.chartColors[0],
           borderWidth: 2,
           fill: false,
           yAxisID: 'temperature',
@@ -62,7 +64,7 @@
         var temp2Dataset = {
           type: 'line',
           label: 'Temp2',
-          borderColor: window.chartColors.purple,
+          borderColor: window.chartColors[3],
           borderWidth: 2,
           fill: false,
           yAxisID: 'temperature',
@@ -72,11 +74,31 @@
         var temp3Dataset = {
           type: 'line',
           label: 'Temp3',
-          borderColor: window.chartColors.orange,
+          borderColor: window.chartColors[4],
           borderWidth: 2,
           fill: false,
           yAxisID: 'temperature',
           data: []
+        };
+
+        var temp4Dataset = {
+          type: 'line',
+          label: 'Temp4',
+          borderColor: window.chartColors[2],
+          borderWidth: 2,
+          fill: false,
+          yAxisID: 'temperature',
+          data: []
+        };
+
+        var humDataset = {
+          type: 'line',
+          label: 'Humidity',
+          borderColor: window.chartColors[6],
+          borderWidth: 2,
+          fill: false,
+          yAxisID: 'light',
+          data: [],
         };
 
         var lightDataset = {
@@ -106,6 +128,8 @@
           temp1Dataset.data.push(d.temp1);
           temp2Dataset.data.push(d.temp2);
           temp3Dataset.data.push(d.temp3);
+          temp4Dataset.data.push(d.temp4);
+          humDataset.data.push(d.hum);
           lightDataset.data.push(Math.round(d.light / 1024 * 100, 0));
           light2Dataset.data.push(Math.round(d.light2 / 1024 * 100, 0));
         });
@@ -114,6 +138,8 @@
         tmpChartData.datasets.push(temp1Dataset);
         tmpChartData.datasets.push(temp2Dataset);
         tmpChartData.datasets.push(temp3Dataset);
+        tmpChartData.datasets.push(temp4Dataset);
+        tmpChartData.datasets.push(humDataset);
         tmpChartData.datasets.push(lightDataset);
         tmpChartData.datasets.push(light2Dataset);
         
