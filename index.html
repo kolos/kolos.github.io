@@ -25,7 +25,7 @@
             "#4daf4a",
             "#984ea3",
             "#ff7f00",
-            "#ffff33",
+            "#66CCCC",
             "#a65628",
             "#f781bf",
             "#999999",
@@ -91,6 +91,16 @@
           data: []
         };
 
+        var temp5Dataset = {
+          type: 'line',
+          label: 'Temp5',
+          borderColor: window.chartColors[5],
+          borderWidth: 2,
+          fill: false,
+          yAxisID: 'temperature',
+          data: []
+        };
+
         var humDataset = {
           type: 'line',
           label: 'Humidity',
@@ -129,6 +139,7 @@
           temp2Dataset.data.push(d.temp2);
           temp3Dataset.data.push(d.temp3);
           temp4Dataset.data.push(d.temp4);
+          temp5Dataset.data.push(d.temp5);
           humDataset.data.push(d.hum);
           lightDataset.data.push(Math.round(d.light / 1024 * 100, 0));
           light2Dataset.data.push(Math.round(d.light2 / 1024 * 100, 0));
@@ -139,6 +150,7 @@
         tmpChartData.datasets.push(temp2Dataset);
         tmpChartData.datasets.push(temp3Dataset);
         tmpChartData.datasets.push(temp4Dataset);
+        tmpChartData.datasets.push(temp5Dataset);
         tmpChartData.datasets.push(humDataset);
         tmpChartData.datasets.push(lightDataset);
         tmpChartData.datasets.push(light2Dataset);
