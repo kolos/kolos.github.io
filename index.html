@@ -29,6 +29,10 @@
             "#a65628",
             "#f781bf",
             "#999999",
+            "#15607a",
+            "#1d81a2",
+            "#08bb9f",
+            "#0aa784",
       ];
       
       window.onload = function() {
@@ -101,6 +105,26 @@
           data: []
         };
 
+        var temp6Dataset = {
+          type: 'line',
+          label: 'Temp6',
+          borderColor: window.chartColors[9],
+          borderWidth: 2,
+          fill: false,
+          yAxisID: 'temperature',
+          data: []
+        };
+
+        var temp7Dataset = {
+          type: 'line',
+          label: 'Temp7',
+          borderColor: window.chartColors[7],
+          borderWidth: 2,
+          fill: false,
+          yAxisID: 'temperature',
+          data: []
+        };
+
         var humDataset = {
           type: 'line',
           label: 'Humidity',
@@ -140,6 +164,8 @@
           temp3Dataset.data.push(d.temp3);
           temp4Dataset.data.push(d.temp4);
           temp5Dataset.data.push(d.temp5);
+          temp6Dataset.data.push(d.temp6);
+          temp7Dataset.data.push(d.temp7);
           humDataset.data.push(d.hum);
           lightDataset.data.push(Math.round(d.light / 1024 * 100, 0));
           light2Dataset.data.push(Math.round(d.light2 / 1024 * 100, 0));
@@ -151,6 +177,8 @@
         tmpChartData.datasets.push(temp3Dataset);
         tmpChartData.datasets.push(temp4Dataset);
         tmpChartData.datasets.push(temp5Dataset);
+        tmpChartData.datasets.push(temp6Dataset);
+        tmpChartData.datasets.push(temp7Dataset);
         tmpChartData.datasets.push(humDataset);
         tmpChartData.datasets.push(lightDataset);
         tmpChartData.datasets.push(light2Dataset);
