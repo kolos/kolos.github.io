@@ -163,6 +163,16 @@
           yAxisID: 'light',
           data: [],
         };
+
+        var distanceDataset = {
+          type: 'line',
+          label: 'Distance',
+          backgroundColor: "#77848c",
+          borderColor: "#77848c",
+          fill: false,
+          yAxisID: 'light',
+          data: [],
+        };
       
         data.temps.forEach(function(d) {
           tmpChartData.labels.push(d.hour);
@@ -180,6 +190,7 @@
           humDataset.data.push(d.hum);
           lightDataset.data.push(Math.round(d.light / 1024 * 100, 0));
           light2Dataset.data.push(Math.round(d.light2 / 1024 * 100, 0));
+          distanceDataset.data.push(Math.round((192 - (d.distance|144)) / 48 * 100, 0));
         });
 
         tmpChartData.datasets.push(temp0Dataset);
@@ -194,6 +205,7 @@
         tmpChartData.datasets.push(humDataset);
         tmpChartData.datasets.push(lightDataset);
         tmpChartData.datasets.push(light2Dataset);
+        tmpChartData.datasets.push(distanceDataset);
         
         return tmpChartData;
       };
