@@ -275,7 +275,7 @@
                     }
                     
                     return {
-                      text: dataset.label + " (Min: " + Chart.helpers.min(dataset.data).toFixed(1) + postfix + ", Max: " + Chart.helpers.max(dataset.data).toFixed(1) + postfix + ", Last: " + dataset.data[dataset.data.length - 1].toFixed(1)  + postfix +  ")",
+                      text: dataset.label + " (Min: " + Number(Chart.helpers.min(dataset.data).toFixed(1)) + postfix + ", Max: " + Number(Chart.helpers.max(dataset.data).toFixed(1)) + postfix + ", Last: " + Number(dataset.data[dataset.data.length - 1].toFixed(1))  + postfix +  ")",
                       fillStyle: (!Chart.helpers.isArray(dataset.backgroundColor) ? dataset.backgroundColor : dataset.backgroundColor[0]),
                       hidden: !chart.isDatasetVisible(i),
                       lineCap: dataset.borderCapStyle,
