@@ -187,7 +187,7 @@
           temp6Dataset.data.push(d.temp6);
           temp7Dataset.data.push(d.temp7);
           temp8Dataset.data.push(d.temp8);
-          humDataset.data.push(d.hum);
+          humDataset.data.push(Math.round(d.hum));
           lightDataset.data.push(Math.round(d.light / 1024 * 100, 0));
           light2Dataset.data.push(Math.round(d.light2 / 1024 * 100, 0));
           distanceDataset.data.push(Math.round((192 - (d.distance|144)) / 48 * 100, 0));
@@ -258,6 +258,40 @@
                   return data.datasets[item.datasetIndex].label + ": " + itemvalue;
                 }
               }
+            },
+            legend: {
+              display: true,
+              position: 'bottom',
+              labels: {
+                generateLabels: function(chart) {
+                  var data = chart.data;
+                  return Chart.helpers.isArray(data.datasets) ? data.datasets.map(function(dataset, i) {
+
+                    var postfix = "";
+                    if(dataset.yAxisID == "temperature") {
+                      postfix = "°C";
+                    } else if(dataset.yAxisID == "light") {
+                      postfix = "%";
+                    }
+                    
+                    return {
+                      text: dataset.label + " (Min: " + Chart.helpers.min(dataset.data).toFixed(1) + postfix + ", Max: " + Chart.helpers.max(dataset.data).toFixed(1) + postfix + ", Last: " + dataset.data[dataset.data.length - 1].toFixed(1)  + postfix +  ")",
+                      fillStyle: (!Chart.helpers.isArray(dataset.backgroundColor) ? dataset.backgroundColor : dataset.backgroundColor[0]),
+                      hidden: !chart.isDatasetVisible(i),
+                      lineCap: dataset.borderCapStyle,
+                      lineDash: dataset.borderDash,
+                      lineDashOffset: dataset.borderDashOffset,
+                      lineJoin: dataset.borderJoinStyle,
+                      lineWidth: dataset.borderWidth,
+                      strokeStyle: dataset.borderColor,
+                      pointStyle: dataset.pointStyle,
+
+                      // Below is extra data used for toggling the datasets
+                      datasetIndex: i
+                    };
+                  }, this) : [];
+                },
+              },
             },
             scales: {
               yAxes: [{
